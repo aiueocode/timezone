@@ -8,6 +8,20 @@ function currentLocal() {
 }
 
 /*
+	Change type
+*/
+function change() {
+	if(document.getElementById("typeselect").value == 1) {
+		//Local to Timezone
+		console.log(1);
+		return 1;
+	} else {
+		//Time zone to Local
+		console.log(2);
+		return 2;
+	}
+}
+/*
   Convert to specific time zone time from your location time
 */
 function getTimeZoneTime() {

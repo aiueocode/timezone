@@ -19,6 +19,13 @@
       			</li>
       		</ui>
       		<ui>
+			    <select id='typeselect' onchange='if(this.value != 0) { change(); }'>
+			        <option value='0'>Select</option>
+			        <option value='1'>Local to Timezone</option>
+			        <option value='2'>Timezone to Local</option>
+		    	</select>
+      		</ui>
+      		<ui>
 		        <li class="list-group-item">
 		        	<div id="datepickererror"></div>
 		        	<!-- Browser check because Safari does not support HTML5 date picker -->
