@@ -4,56 +4,45 @@
 function currentLocal() {
 	const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 	const currentTime = moment().tz(timezone).format("YYYY-MM-DD HH:mm ZZ");
-	document.getElementById("currentLocal").innerHTML = "Local time: " + currentTime; 
+	document.getElementById("currentLocal").innerHTML = "Local Current Time: " + currentTime; 
 }
 
 /*
-	Change type
-*/
-function change() {
-	if(document.getElementById("typeselect").value == 1) {
-		//Local to Timezone
-		console.log(1);
-		return 1;
-	} else {
-		//Time zone to Local
-		console.log(2);
-		return 2;
-	}
-}
-/*
   Convert to specific time zone time from your location time
 */
-function getTimeZoneTime() {
+function convertCurrentTimeZoneTime() {
 	const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-	document.getElementById("timezonetime").innerHTML = 
+	document.getElementById("result").innerHTML = 
 	`<li class="list-group-item"> ${document.getElementById("timezone").value}: ${moment().tz(document.getElementById("timezone").value).format('YYYY-MM-DD HH:mm ZZ')}`;
+	document.getElementById("result").style.color = "blue";
 }
 
 /*
   Convert to your location time from specific time zone time
 */
-function getYourTime() {
+function convertCurrentYourTime() {
 	const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-	document.getElementById("yourtime").innerHTML = 
-	`<li class="list-group-item"> ${document.getElementById("timezonel").value}: ${moment().tz(document.getElementById("timezonel").value).format('YYYY-MM-DD HH:mm ZZ')}`;
-	document.getElementById("yourtime").style.color = "blue";
+	document.getElementById("result").innerHTML = 
+	`<li class="list-group-item"> ${document.getElementById("timezone").value}: ${moment().tz(document.getElementById("timezone").value).format('YYYY-MM-DD HH:mm ZZ')}`;
+	document.getElementById("result").style.color = "blue";
 }
 
 /*
   Create time zone pull down menus.
 */
-function createZoneList(option) {
+function createZoneList() {
 	let labelFor = "timeZoneList";
 	let selectId = "timezone";
-	let onClick = "getTimeZoneTime()";
-	let output = "timezoneselect";
-	if (option === 1) {
-		labelFor = "timeZoneListl";
-		selectId = "timezonel";
-		onClick = "getYourTime()";
-		output = "timezoneselectl";
+	let onClick = "";
+	if (document.getElementById("typeselect").value == 1) {
+		//local to timezone
+		onClick = "convertCurrentTimeZoneTime()";
+	} else {
+		//timezone to local
+		onClick = "convertCurrentYourTime()";
 	}
+	let output = "timezoneselect";
+
 	const timeZones = moment.tz.names();
 	let selections = `<label for="${labelFor}">Time Zones: </label>
 	<select type="select" id="${selectId}">`;
@@ -83,11 +72,8 @@ function presetLoad(PRESET) {
 /*
   Get date from the form.
 */
-function getDate(option) {
+function getDate() {
 	let id = "date";
-	if(option === 1) {
-		id = "datel"
-	}
 	const date = document.getElementById(id).value;
 	let formatedDate = "";
 	if (moment(date, 'YYYY-MM-DD').isValid()) {
@@ -103,16 +89,11 @@ function getDate(option) {
 /*
   Get time from the form.
 */
-function getTime(option) {
+function getTime() {
 	let h = "time-h";
 	let m = "time-m";
 	let er = "error-for-time";
 
-	if (option === 1) {
-		h = "time-hl";
-		m = "time-ml";
-		er = "error-for-timel";
-	}
 	const hh = document.getElementById(h).value;
 	const mm = document.getElementById(m).value;
 	const ss = "00";
@@ -131,12 +112,12 @@ function getDateAndZoneTime() {
 	const time = getTime();
 	const formatedDateTime = date + " " + time;
 	if(moment(formatedDateTime, "YYYY-MM-DD HH:mm:ss").isValid()) {
-		document.getElementById("timezonetime").innerHTML = 
+		document.getElementById("result").innerHTML = 
 		`<li class="list-group-item"> ${document.getElementById("timezone").value}: ${moment(formatedDateTime, "YYYY-MM-DD HH:mm:ss").tz(document.getElementById("timezone").value).format('YYYY-MM-DD HH:mm ZZ')}</li>`;
-		document.getElementById("timezonetime").style.color = "blue";
+		document.getElementById("result").style.color = "blue";
 	} else {
-		document.getElementById("timezonetime").innerHTML = "Format Error!!";
-		document.getElementById("timezonetime").style.color = "red";
+		document.getElementById("result").innerHTML = "Format Error!!";
+		document.getElementById("result").style.color = "red";
 	}
 }
 
@@ -144,8 +125,8 @@ function getDateAndZoneTime() {
  Get your date and time.
 */
 function getDateAndYourTime() {
-	const date = getDate(1);
-	const time = getTime(1);
+	const date = getDate();
+	const time = getTime();
 	const formatedDateTime = date + " " + time;
 	if(moment(formatedDateTime, "YYYY-MM-DD HH:mm:ss").isValid()) {
 		//get local time zone name
@@ -156,14 +137,28 @@ function getDateAndYourTime() {
 			losAngeles.format(); // 2014-06-01T09:00:00-07:00
 		*/
 		let localTimeZone = moment.tz.guess();
-		let zoneTime = moment.tz(formatedDateTime, document.getElementById("timezonel").value);
+		let zoneTime = moment.tz(formatedDateTime, document.getElementById("timezone").value);
 		let yourTime = zoneTime.tz(localTimeZone).format("YYYY-MM-DD HH:mm:ss z");
-		document.getElementById("yourtime").innerHTML = 
+		document.getElementById("result").innerHTML = 
 		`<li class="list-group-item"> ${localTimeZone}: ${yourTime}</li>`;
-		document.getElementById("yourtime").style.color = "blue";
+		document.getElementById("result").style.color = "blue";
 	} else {
-		document.getElementById("yourtime").innerHTML = "Format Error!!";
-		document.getElementById("yourtime").style.color = "red";
+		document.getElementById("result").innerHTML = "Format Error!!";
+		document.getElementById("result").style.color = "red";
+	}
+}
+
+/*
+	Submit
+*/
+
+function submitSpecified() {
+	if(document.getElementById("typeselect").value == 1) {
+		//Local to Timezone(specified)
+		getDateAndZoneTime();
+	} else {
+		//Time zone to Local(specified)
+		getDateAndYourTime();
 	}
 }
 
