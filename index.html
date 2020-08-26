@@ -21,12 +21,6 @@
       			</li>
       		</ui>
       		<ui>
-			    <select id='typeselect' class="col-sm-4 m-3">
-			        <option value='1'>Local to Timezone</option>
-			        <option value='2'>Timezone to Local</option>
-		    	</select>
-      		</ui>
-      		<ui>
 		        <li class="list-group-item">
 		        	<div id="datepickererror"></div>
 		        	<!-- Browser check because Safari does not support HTML5 date picker -->
@@ -36,6 +30,10 @@
 		        		}
 		        	</script>
 	      	        <div id="timezoneselect"></div>
+    			    <select id='typeselect' class="col-sm-4 m-3">
+			        	<option value='1'>Local to Timezone</option>
+			        	<option value='2'>Timezone to Local</option>
+		    		</select>
 					<label for="date">Your Date and Time: (Date is optional.)</label>
 					<div id="error-for-time"></div>
 					<input type="date" id="date" name="date" required pattern="\d{4}-\d{2}-\d{2}">
