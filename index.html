@@ -17,7 +17,7 @@
       		<ui class="list-group">
       			<li class="list-group-item">
       				<div class="container-md" id="currentLocal"></div>
-      				<input type="button" onclick="location.reload()" value="Reload">
+      				<input type="button" onclick="currentReload()" value="Reload">
       			</li>
       		</ui>
       		<ui>
@@ -34,7 +34,7 @@
 			        	<option value='1'>Local to Timezone</option>
 			        	<option value='2'>Timezone to Local</option>
 		    		</select>
-					<label for="date">Your Date and Time: (Date is optional.)</label>
+					<label for="date">Your Date and Time: (Date is optional. If date is empty, the system uses your local date.)</label>
 					<div id="error-for-time"></div>
 					<input type="date" id="date" name="date" required pattern="\d{4}-\d{2}-\d{2}">
 					<select name="time-h" id="time-h">

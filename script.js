@@ -1,3 +1,6 @@
+//Local time = your computer time
+//Time zone time = specieid time zone time
+
 /*
   Get current your location time
 */
@@ -10,7 +13,7 @@ function currentLocal() {
 /*
   Convert to specific time zone time from your location time
 */
-function convertCurrentTimeZoneTime() {
+function convertFromCurrentTimeZoneTime() {
 	const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 	document.getElementById("result").innerHTML = 
 	`<li class="list-group-item"> ${document.getElementById("timezone").value}: ${moment().tz(document.getElementById("timezone").value).format('YYYY-MM-DD HH:mm ZZ')}`;
@@ -18,9 +21,9 @@ function convertCurrentTimeZoneTime() {
 }
 
 /*
-  Convert to your location time from specific time zone time
+  Convert to your local time from specific time zone time
 */
-function convertCurrentYourTime() {
+function convertFromCurrentLocalTime() {
 	const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 	document.getElementById("result").innerHTML = 
 	`<li class="list-group-item"> ${document.getElementById("timezone").value}: ${moment().tz(document.getElementById("timezone").value).format('YYYY-MM-DD HH:mm ZZ')}`;
@@ -36,10 +39,10 @@ function createZoneList() {
 	let onClick = "";
 	if (document.getElementById("typeselect").value == 1) {
 		//local to timezone
-		onClick = "convertCurrentTimeZoneTime()";
+		onClick = "convertFromCurrentTimeZoneTime()";
 	} else {
 		//timezone to local
-		onClick = "convertCurrentYourTime()";
+		onClick = "convertFromCurrentLocalTime()";
 	}
 	let output = "timezoneselect";
 
@@ -54,6 +57,14 @@ function createZoneList() {
 }
 
 /*
+	When Reload button pressed.
+	Reload current local time and preset times.
+*/
+function currentReload() {
+	currentLocal();
+	presetLoad(PRESET);
+}
+/*
   Create preset time zone current time from your location time
 */
 function presetLoad(PRESET) {
@@ -66,7 +77,7 @@ function presetLoad(PRESET) {
 		}
 		presetZones += "</ul>"
 	}
-	return presetZones;
+	document.getElementById("presetzones").innerHTML = presetZones;
 }
 
 /*
@@ -105,9 +116,9 @@ function getTime() {
 }
 
 /*
-  Get date and time of specified zone time
+  Convert specified local date and time to zone date and time
 */
-function getDateAndZoneTime() {
+function convertFromLocalDateAndTime() {
 	const date = getDate();
 	const time = getTime();
 	const formatedDateTime = date + " " + time;
@@ -122,9 +133,9 @@ function getDateAndZoneTime() {
 }
 
 /*
- Get your date and time.
+ Convert specified zone date and time to local date and time.
 */
-function getDateAndYourTime() {
+function convertFromZoneDateAndTime() {
 	const date = getDate();
 	const time = getTime();
 	const formatedDateTime = date + " " + time;
@@ -155,10 +166,10 @@ function getDateAndYourTime() {
 function submitSpecified() {
 	if(document.getElementById("typeselect").value == 1) {
 		//Local to Timezone(specified)
-		getDateAndZoneTime();
+		convertFromLocalDateAndTime();
 	} else {
 		//Time zone to Local(specified)
-		getDateAndYourTime();
+		convertFromZoneDateAndTime();
 	}
 }
 
@@ -170,7 +181,7 @@ function submitSpecified() {
 const PRESET = ["Japan", "PST8PDT", "America/Boise"];
 
 /*
-  process
+  Initial process
 */
 // current time auto reload
 currentLocal();
@@ -181,4 +192,4 @@ createZoneList();
 createZoneList(1);
 
 //Preset load
-document.getElementById("presetzones").innerHTML = presetLoad(PRESET);
+presetLoad(PRESET);
